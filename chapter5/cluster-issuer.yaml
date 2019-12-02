@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-ghost
+  namespace: handson
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: h.matsuoka@wiz-net.jp
+    privateKeySecretRef:
+      name: letsencrypt-ghost
+    solvers:
+      - http01:
+          ingress:
+            class: nginx

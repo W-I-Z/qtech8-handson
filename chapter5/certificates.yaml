@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: tls-secret
+  namespace: handson
+spec:
+  secretName: tls-secret-staging
+  dnsNames:
+    - ms-handson0.mm.wiz-net.dev
+  issuerRef:
+    name: letsencrypt-ghost
+    kind: ClusterIssuer

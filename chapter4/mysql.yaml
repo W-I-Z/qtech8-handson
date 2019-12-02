@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mysql
+  namespace: handson
+  labels:
+    app: ghost-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost-db
+  template:
+    metadata:
+      namespace: handson
+      labels:
+        app: ghost-db
+    spec:
+      containers:
+        - name: ghost-db-mysql
+          image: mysql
+          env:
+            - name: MYSQL_DATABASE
+              value: ghost
+            - name: MYSQL_USER
+              value: ghost-user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_PASSWORD
+                  name: mysql-secret
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_ROOT_PASSWORD
+                  name: mysql-secret
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: mysql-volume
+            - mountPath: "/etc/mysql/conf.d/"
+              name: mysql-config
+      volumes:
+        - name: mysql-volume
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+        - name: mysql-config
+          configMap:
+            name: mysql-config-map
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghost-db
+  namespace: handson
+spec:
+  ports:
+    - port: 3306
+      protocol: TCP
+  selector:
+    app: ghost-db
