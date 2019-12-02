@@ -49,7 +49,8 @@ Kubernetes の基本的な操作方法を実際に操作しながら、JAMStack 
 今回は、各社で用意したAmazon EKS (Amazon Elastic Kubernetes Service) を使用します。
 Amazon EKSでは、コンテナ化されたアプリケーションのデプロイ、管理、スケールを Kubernetes を使って AWS で簡単に実行できます。
 
-今回使用するリポジトリはこちらです。
+今回使用するリポジトリとスライドはこちらです。
+https://w-i-z.github.io/qtech8-handson/slide.html
 https://github.com/W-I-Z/qtech8-handson
 
 ---
