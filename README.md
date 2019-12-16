@@ -304,7 +304,7 @@ https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap
 MySQL の設定を ConfigMap で作成してみましょう。
 
 ```
-$ kubectl -f apply ./chapter4/config-map.yaml
+$ kubectl apply -f ./chapter4/config-map.yaml
 ```
 
 ConfigMap を確認します。
@@ -403,10 +403,13 @@ volumes:
 
 ついでに ConfigMap と Secret を使用した MySQL の Pod をデプロイします。
 
-まずは、MySQLのデータを保存するボリュームを作成します。
+まずは、MySQLのデータを保存するボリュームを AWS EBS (Elastic Block Store) で作成します。
+以下のコマンドを、自分のアベイラビリティゾーンに変更して実行してください。
+
 ```
-$ aws ec2 create-volume --size=10 --volume-type=gp2 --availability-zone us-west-2
+$ aws ec2 create-volume --size=10 --volume-type=gp2 --availability-zone us-west-2c
 ```
+
 作成したボリュームのIDをmysql-pv-aws.yamlに入力してください。
 
 次に、以下のコマンドを実行します。
@@ -420,10 +423,13 @@ $ kubectl get pods -n handson
 ---
 
 MySQLに接続できるか確認します。
+
 ```
 $ kubectl port-forward [Pod Name] 3306:3306 -n handson
 ```
+
 別ターミナルで以下を実行し接続してください。
+
 ```
 $ mysql -u root -p -h 127.0.0.1
 Enter [Root Password]
